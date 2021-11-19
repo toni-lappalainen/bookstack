@@ -23,9 +23,7 @@ const getAllBooks = async (req, res) => {
 
 const getBook = async (req, res) => {
 	try {
-		const book = await Book.findOne({
-			socialSecurityNumber: req.params.id,
-		});
+		const book = await Book.findById(req.params.id);
 
 		res.status(200).json({
 			status: 'success',
@@ -35,6 +33,24 @@ const getBook = async (req, res) => {
 		});
 	} catch (err) {
 		res.status(404).json({
+			status: 'fail',
+			message: err,
+		});
+	}
+};
+
+const createBook = async (req, res) => {
+	try {
+		const newBook = await LogItem.create(req.body);
+
+		res.status(201).json({
+			status: 'success',
+			data: {
+				book: newBook,
+			},
+		});
+	} catch (err) {
+		res.status(400).json({
 			status: 'fail',
 			message: err,
 		});
@@ -57,39 +73,21 @@ const deleteBook = async (req, res) => {
 	}
 };
 
-// TODO: create proper update function
-// this uses patch instead of update, so only partial data is needed
+// this is called by patch instead of update, so only partial data is needed
+// but since the old data is already in the form, it will update them all.
 const updateBook = async (req, res) => {
-	let changes;
-
-	if (req.body.end !== undefined) {
-		changes = {
-			$set: {
-				problem: req.body.end,
-			},
-		};
-	} else {
-		changes = {
-			// $push adds new values to the LogItem. Here it's adding new elements to content array.
-			$push: {
-				content: {
-					player: req.body.question,
-					customer: req.body.answer,
-				},
-			},
-		};
-	}
+	const changes = {
+		title: req.body.title,
+		author: req.body.author,
+		description: req.body.description,
+	};
 
 	try {
-		const book = await Book.updateOne(
-			{ socialSecurityNumber: req.params.id },
-			changes,
-			{
-				safe: true,
-				upsert: false, //if there is no document, create new
-				new: true, // return updated document
-			}
-		);
+		const book = await Book.findByIdAndUpdateOne(req.params.id, changes, {
+			safe: true,
+			upsert: false, //if there is no document, create new
+			new: true, // return updated document
+		});
 
 		res.status(200).json({
 			status: 'success',
@@ -107,6 +105,8 @@ const updateBook = async (req, res) => {
 
 module.exports = {
 	getAllBooks,
+	getBook,
+	createBook,
 	updateBook,
 	deleteBook,
 };

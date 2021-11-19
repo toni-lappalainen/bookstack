@@ -3,12 +3,10 @@ const app = require('./app');
 
 const port = 3002;
 
-// TODO: create mongo atlas
-const url =
-	'mongodb+srv://nelson:c6DVw8V2RnH87PHA@cluster0.q9lmo.mongodb.net/healtcarerc?retryWrites=true&w=majority';
+const mongoUrl = 'mongodb://localhost:27017/bookstack';
 
 mongoose
-	.connect(url, {
+	.connect(mongoUrl, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true,
