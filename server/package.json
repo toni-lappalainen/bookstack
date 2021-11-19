@@ -1,0 +1,26 @@
+{
+	"name": "bookstack-server",
+	"version": "0.1.0",
+	"description": "Server for Bookstack client",
+	"main": "./src/server.js",
+	"scripts": {
+		"start:dev": "nodemon server.js",
+		"start:prod": "NODE_ENV=production nodemon server.js"
+	},
+	"author": "Toni Lappalainen",
+	"license": "MIT",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"mongodb": "^4.2.0",
+		"mongoose": "^6.0.13"
+	},
+	"devDependencies": {
+		"eslint": "^8.2.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-import": "^2.25.3",
+		"eslint-plugin-prettier": "^4.0.0",
+		"prettier": "^2.4.1"
+	}
+}
