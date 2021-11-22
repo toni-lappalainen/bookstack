@@ -1,57 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { sendGetBookListRequest } from '../database';
+import { DataContext } from '../Contexts/ContextProvider';
 
 const Booklist = () => {
-	const [books, setBooks] = useState(null);
+	//const [books, setBooks] = useState(null);
+	const { booksArray, setBooksArray, selectedBook, setSelectedBook } =
+		useContext(DataContext);
 
 	// Get list of books in server
 	useEffect(() => {
-		async function getData() {
+		const getData = async () => {
 			try {
 				const fetchData = await sendGetBookListRequest();
 				console.log(fetchData);
-				setBooks(fetchData.data.books);
-				console.log(books.data.books);
+				setBooksArray(fetchData.data.books);
+				console.log(booksArray);
 			} catch (err) {
 				console.log(err);
 			}
-		}
+		};
 		getData();
 	}, []);
+
+	const selectRow = (row) => {
+		const book = booksArray.find((x) => x.id === row.id);
+		setSelectedBook(book);
+		console.log(selectedBook);
+	};
 
 	// Array for the DataTable
 	const columns = [
 		{
 			name: 'Author',
-			selector: 'author',
+			selector: (row) => row.author,
 			sortable: true,
 		},
 		{
 			name: 'Title',
-			selector: 'title',
+			selector: (row) => row.title,
 			sortable: true,
-		},
-		{
-			name: 'Description',
-			selector: 'description',
-			sortable: false,
 		},
 	];
 
 	const renderTable = () => {
-		if (books === null) return <DataTable progressPending noHeader />;
+		if (booksArray === null) return <DataTable progressPending noHeader />;
 		else
 			return (
 				<DataTable
 					title="Books"
 					columns={columns}
-					data={books}
+					data={booksArray}
 					defaultSortField="author"
 					pagination
 					highlightOnHovers
 					dense
 					noHeader
+					striped
+					highlightOnHover
+					selectableRows
+					selectableRowsSingle
+					selectableRowsHighlight
+					onRowClicked={(row) => selectRow(row)}
 				/>
 			);
 	};
