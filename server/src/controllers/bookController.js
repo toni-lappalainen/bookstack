@@ -41,7 +41,7 @@ const getBook = async (req, res) => {
 
 const createBook = async (req, res) => {
 	try {
-		const newBook = await LogItem.create(req.body);
+		const newBook = await Book.create(req.body);
 
 		res.status(201).json({
 			status: 'success',
