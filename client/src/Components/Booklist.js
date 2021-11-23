@@ -13,9 +13,7 @@ const Booklist = () => {
 		const getData = async () => {
 			try {
 				const fetchData = await sendGetBookListRequest();
-				console.log(fetchData);
 				setBooksArray(fetchData.data.books);
-				console.log(booksArray);
 			} catch (err) {
 				console.log(err);
 			}

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Formik, Form, useField, useFormikContext } from 'formik';
 import { DataContext } from '../Contexts/ContextProvider';
 import {
+	sendGetBookListRequest,
 	sendPostBookRequest,
 	sendPatchBookRequest,
 	sendDeleteBookRequest,
@@ -13,7 +14,7 @@ const initialFormData = {
 	description: '',
 };
 
-// Custom field that keeps
+// Custom field for getting selections from list
 const MyField = (props) => {
 	const { selectedBook } = useContext(DataContext);
 	const { setFieldValue } = useFormikContext();
@@ -42,7 +43,7 @@ const MyField = (props) => {
 };
 
 const BookForm = () => {
-	const { selectedBook } = useContext(DataContext);
+	const { setBooksArray, selectedBook } = useContext(DataContext);
 
 	const [formData, setFormData] = React.useState(initialFormData);
 
@@ -51,28 +52,25 @@ const BookForm = () => {
 		if (selectedBook !== null) setFormData(selectedBook);
 	}, [selectedBook]);
 
-	const handleSave = async (values) => {
+	const retrieveBookList = async () => {
 		try {
-			await sendPostBookRequest(values);
+			const fetchData = await sendGetBookListRequest();
+			setBooksArray(fetchData.data.books);
 		} catch (err) {
 			console.log(err);
 		}
 	};
-	const handleUpdate = async (values) => {
-		console.log(values);
+
+	const handleSubmit = async (values, type) => {
 		try {
-			await sendPatchBookRequest(selectedBook._id, values);
+			if (type === 'save') await sendPostBookRequest(values);
+			else if (type === 'update')
+				await sendPatchBookRequest(selectedBook._id, values);
+			else if (type === 'delete') sendDeleteBookRequest(selectedBook._id);
 		} catch (err) {
 			console.log(err);
 		}
-	};
-	const handleDelete = async () => {
-		console.log('lol');
-		try {
-			await sendDeleteBookRequest(selectedBook._id);
-		} catch (err) {
-			console.log(err);
-		}
+		retrieveBookList();
 	};
 
 	return (
@@ -87,13 +85,7 @@ const BookForm = () => {
 				return errors;
 			}}
 			onSubmit={async (values, { setSubmitting }) => {
-				if (document.activeElement.dataset.flag === 'save') {
-					await handleSave(values);
-					setSubmitting = false;
-				} else if (document.activeElement.dataset.flag === 'update')
-					handleUpdate(values);
-				else if (document.activeElement.dataset.flag === 'delete')
-					handleDelete();
+				handleSubmit(values, document.activeElement.dataset.flag);
 			}}
 		>
 			{({ isSubmitting }) => (
