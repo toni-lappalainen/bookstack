@@ -1,36 +1,125 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, Fragment } from 'react';
+import { Formik, Form, ErrorMessage, useField, useFormikContext } from 'formik';
 import { DataContext } from '../Contexts/ContextProvider';
+import {
+	sendPostBookRequest,
+	sendPatchBookRequest,
+	sendDeleteBookRequest,
+} from '../database';
 
-const BookForm = (props) => {
+const initialFormData = {
+	author: '',
+	title: '',
+	description: '',
+};
+
+const MyField = (props) => {
 	const { selectedBook } = useContext(DataContext);
-	const [book, setBook] = useState({
-		author: '',
-		title: '',
-		description: '',
-	});
+	const { setFieldValue } = useFormikContext();
+	const [field, meta] = useField(props);
+	// boolean for checking if current field is textarea
+	const isTextArea = props.name === 'description';
 
 	useEffect(() => {
-		if (selectedBook !== null) setBook(selectedBook);
-	}, [selectedBook]);
+		// set the value of field based on selectedBook
+		if (selectedBook !== null) {
+			console.log(selectedBook[props.name]);
+			setFieldValue(props.name, selectedBook[props.name]);
+		}
+	}, [selectedBook, setFieldValue, props.name]);
 
 	return (
 		<>
-			<label>
-				Author:
-				<input type="text" value={book.author} />
-			</label>
-			<label>
-				Title:
-				<input type="text" value={book.title} />
-			</label>
-			<label>
-				Description:
-				<textarea type="text" value={book.description} />
-			</label>
-			<input type="submit" value="Save new" />
-			<input type="submit" value="Update" />
-			<input type="submit" value="Delete" />
+			{isTextArea ? (
+				<textarea {...props} {...field} />
+			) : (
+				<input {...props} {...field} />
+			)}
+			{!!meta.touched && !!meta.error && <div>{meta.error}</div>}
 		</>
+	);
+};
+
+const BookForm = () => {
+	const { selectedBook } = useContext(DataContext);
+
+	const [formData, setFormData] = React.useState(initialFormData);
+
+	useEffect(() => {
+		console.log('lol');
+		if (selectedBook !== null) setFormData(selectedBook);
+	}, [selectedBook]);
+
+	const handleSave = async (values) => {
+		try {
+			await sendPostBookRequest(values);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+	const handleUpdate = async (values) => {
+		try {
+			await sendPatchBookRequest(values);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+	const handleDelete = async () => {
+		console.log('lol');
+		try {
+			await sendDeleteBookRequest(selectedBook._id);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	return (
+		<Formik
+			initialValues={formData}
+			validate={(values) => {
+				const errors = {};
+
+				if (!values.author) {
+					errors.author = 'Required';
+				}
+				return errors;
+			}}
+			onSubmit={async (values, { setSubmitting }) => {
+				if (document.activeElement.dataset.flag === 'save') {
+					await handleSave(values);
+					setSubmitting = false;
+				} else if (document.activeElement.dataset.flag === 'update')
+					handleUpdate();
+				else if (document.activeElement.dataset.flag === 'delete')
+					handleDelete();
+			}}
+		>
+			{({ isSubmitting }) => (
+				<Form>
+					<label htmlFor="author">
+						Author
+						<MyField name="author" />
+					</label>
+					<label htmlFor="title">
+						title
+						<MyField name="title" />
+					</label>
+					<label htmlFor="description">
+						description
+						<MyField name="description" as="textarea" />
+					</label>
+					<button type="submit" data-flag="save">
+						Save new
+					</button>
+					<button type="submit" data-flag="update">
+						Update
+					</button>
+					<button type="submit" data-flag="delete">
+						Delete
+					</button>
+				</Form>
+			)}
+		</Formik>
 	);
 };
 

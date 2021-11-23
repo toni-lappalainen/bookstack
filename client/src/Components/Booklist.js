@@ -24,9 +24,8 @@ const Booklist = () => {
 	}, []);
 
 	const selectRow = (row) => {
-		const book = booksArray.find((x) => x.id === row.id);
+		const book = booksArray.find((x) => x._id === row._id);
 		setSelectedBook(book);
-		console.log(selectedBook);
 	};
 
 	// Array for the DataTable
