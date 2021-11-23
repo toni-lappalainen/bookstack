@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState, Fragment } from 'react';
-import { Formik, Form, ErrorMessage, useField, useFormikContext } from 'formik';
+import React, { useContext, useEffect } from 'react';
+import { Formik, Form, useField, useFormikContext } from 'formik';
 import { DataContext } from '../Contexts/ContextProvider';
 import {
 	sendPostBookRequest,
@@ -13,6 +13,7 @@ const initialFormData = {
 	description: '',
 };
 
+// Custom field that keeps
 const MyField = (props) => {
 	const { selectedBook } = useContext(DataContext);
 	const { setFieldValue } = useFormikContext();
@@ -58,8 +59,9 @@ const BookForm = () => {
 		}
 	};
 	const handleUpdate = async (values) => {
+		console.log(values);
 		try {
-			await sendPatchBookRequest(values);
+			await sendPatchBookRequest(selectedBook._id, values);
 		} catch (err) {
 			console.log(err);
 		}
@@ -89,7 +91,7 @@ const BookForm = () => {
 					await handleSave(values);
 					setSubmitting = false;
 				} else if (document.activeElement.dataset.flag === 'update')
-					handleUpdate();
+					handleUpdate(values);
 				else if (document.activeElement.dataset.flag === 'delete')
 					handleDelete();
 			}}

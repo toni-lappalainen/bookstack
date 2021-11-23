@@ -76,6 +76,7 @@ const deleteBook = async (req, res) => {
 // this is called by patch instead of update, so only partial data is needed
 // but since the old data is already in the form, it will update them all.
 const updateBook = async (req, res) => {
+	console.log(req.params.id);
 	const changes = {
 		title: req.body.title,
 		author: req.body.author,
@@ -83,9 +84,8 @@ const updateBook = async (req, res) => {
 	};
 
 	try {
-		const book = await Book.findByIdAndUpdateOne(req.params.id, changes, {
+		const book = await Book.findByIdAndUpdate(req.params.id, changes, {
 			safe: true,
-			upsert: false, //if there is no document, create new
 			new: true, // return updated document
 		});
 

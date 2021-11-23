@@ -27,9 +27,9 @@ const sendPostBookRequest = async (book) => {
 	}
 };
 
-const sendPatchBookRequest = async (book) => {
+const sendPatchBookRequest = async (id, book) => {
 	try {
-		const response = await axios.patch(url + 'books/' + book.id, {
+		const response = await axios.patch(url + 'books/' + id.toString(), {
 			author: book.author,
 			title: book.title,
 			description: book.description,
