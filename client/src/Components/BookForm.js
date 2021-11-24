@@ -79,10 +79,16 @@ const BookForm = () => {
 			validateOnBlur={false}
 			validate={(values) => {
 				const errors = {};
-
-				if (!values.author) errors.author = 'Required!';
-				if (!values.title) errors.title = 'Required!';
-				if (!values.description) errors.description = 'Required!';
+				// check that all fields have values and that they are not too long
+				for (var key in values) {
+					if (values.hasOwnProperty(key)) {
+						if (!values[key]) errors[key] = 'Required!';
+						if (key !== 'description' && values[key].length > 30) {
+							errors[key] = 'Too long!';
+						} else if (values[key].length > 800)
+							errors[key] = 'Too long!';
+					}
+				}
 				return errors;
 			}}
 			onSubmit={async (values, { resetForm }) => {
