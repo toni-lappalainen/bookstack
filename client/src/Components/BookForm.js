@@ -8,24 +8,26 @@ import {
 	sendDeleteBookRequest,
 } from '../apiRequests';
 
+// Component for editing and adding books to the database
+
 const initialFormData = {
 	author: '',
 	title: '',
 	description: '',
 };
 
-// Custom field for getting selections from list
+// Custom field that takes care of showing currently selected book's data in the form
+// without making the values unmutable
 const MyField = (props) => {
 	const { selectedBook } = useContext(DataContext);
 	const { setFieldValue } = useFormikContext();
 	const [field, meta] = useField(props);
-	// boolean for checking if current field is textarea
+	// boolean for checking if current field should be textarea
 	const isTextArea = props.name === 'description';
 
 	useEffect(() => {
 		// set the value of field based on selectedBook
 		if (selectedBook !== null) {
-			console.log(selectedBook[props.name]);
 			setFieldValue(props.name, selectedBook[props.name]);
 		}
 	}, [selectedBook, setFieldValue, props.name]);
@@ -45,13 +47,7 @@ const MyField = (props) => {
 const BookForm = () => {
 	const { setBooksArray, selectedBook } = useContext(DataContext);
 
-	const [formData, setFormData] = React.useState(initialFormData);
-
-	useEffect(() => {
-		console.log('lol');
-		if (selectedBook !== null) setFormData(selectedBook);
-	}, [selectedBook]);
-
+	// function for retrieving the books from database after making changes
 	const retrieveBookList = async () => {
 		try {
 			const fetchData = await sendGetBookListRequest();
@@ -61,12 +57,13 @@ const BookForm = () => {
 		}
 	};
 
-	const handleSubmit = async (values, type) => {
+	const handleSubmit = async (values, submitType) => {
 		try {
-			if (type === 'save') await sendPostBookRequest(values);
-			else if (type === 'update')
+			if (submitType === 'save') await sendPostBookRequest(values);
+			else if (submitType === 'update')
 				await sendPatchBookRequest(selectedBook._id, values);
-			else if (type === 'delete') sendDeleteBookRequest(selectedBook._id);
+			else if (submitType === 'delete')
+				sendDeleteBookRequest(selectedBook._id);
 		} catch (err) {
 			console.log(err);
 		}
@@ -75,16 +72,17 @@ const BookForm = () => {
 
 	return (
 		<Formik
-			initialValues={formData}
+			initialValues={initialFormData}
 			validate={(values) => {
 				const errors = {};
 
-				if (!values.author) {
-					errors.author = 'Required';
-				}
+				if (!values.author) errors.author = 'Required';
+				if (!values.title) errors.title = 'Required';
+				if (!values.description) errors.description = 'Required';
 				return errors;
 			}}
 			onSubmit={async (values, { setSubmitting }) => {
+				// Flag is used to get right submitType by button pressed
 				handleSubmit(values, document.activeElement.dataset.flag);
 			}}
 		>

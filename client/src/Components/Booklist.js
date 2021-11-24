@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { sendGetBookListRequest } from '../apiRequests';
 import { DataContext } from '../Contexts/ContextProvider';
 
+// Component for showing the list of books in DataTable
 const Booklist = () => {
-	//const [books, setBooks] = useState(null);
-	const { booksArray, setBooksArray, selectedBook, setSelectedBook } =
+	const { booksArray, setBooksArray, setSelectedBook } =
 		useContext(DataContext);
 
-	// Get list of books in server
+	// Get list of books in server and assing it to booksArray
 	useEffect(() => {
 		const getData = async () => {
 			try {
@@ -21,6 +21,7 @@ const Booklist = () => {
 		getData();
 	}, []);
 
+	// when Row/book in table is clicked, select that book as currently edited book
 	const selectRow = (row) => {
 		const book = booksArray.find((x) => x._id === row._id);
 		setSelectedBook(book);
@@ -55,9 +56,6 @@ const Booklist = () => {
 					noHeader
 					striped
 					highlightOnHover
-					selectableRows
-					selectableRowsSingle
-					selectableRowsHighlight
 					onRowClicked={(row) => selectRow(row)}
 				/>
 			);
