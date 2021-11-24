@@ -1,0 +1,52 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
+/* root font size, 1rem == 10px, 62.5% (16px is the default) */
+html {
+	font-size: 50%;
+
+	@include respond(phone-large) {
+		font-size: 56.3%;
+	}
+	@include respond(phone-land) {
+		font-size: 56.3%;
+	}
+	@include respond(tab) {
+		font-size: 62.5%;
+	}
+	@include respond(desk-small) {
+		font-size: 62.5%;
+	}
+	@include respond(desk-normal) {
+		font-size: 75%;
+	}
+}
+
+body {
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;
+	line-height: 1.7;
+	color: $color-gray-light;
+
+	background-color: $color-black;
+	box-sizing: border-box;
+}
+
+.container {
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+
+	@include respond(desk-normal) {
+		max-width: 120rem;
+	}
+}
+
+.u-center-text {
+	text-align: center;
+}

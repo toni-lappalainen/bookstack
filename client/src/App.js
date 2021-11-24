@@ -1,16 +1,15 @@
-import './App.css';
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import Booklist from './Components/Booklist';
 import BookForm from './Components/BookForm';
-import { DataContext, DataContextProvider } from './Contexts/ContextProvider';
+import { DataContextProvider } from './Contexts/ContextProvider';
 
 const App = () => {
-	//	const { booksArray, setBooksArray } = DataContext();
-
 	return (
-		<div className="App">
-			<header className="App-header">
-				<h1>Bookstack Client</h1>
+		<div className="container">
+			<header className="header">
+				<h1 className="heading-primary u-center-text">
+					Bookstack Client
+				</h1>
 			</header>
 			<DataContextProvider>
 				<Booklist />

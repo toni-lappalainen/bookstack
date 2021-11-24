@@ -1,0 +1,67 @@
+/* === Variables === */
+
+// Color
+$color-primary: #008999;
+$color-primary-light: #00b6cc;
+$color-primary-dark: #005b66;
+
+$color-gray: #777;
+$color-gray-light: #f7f7f7;
+
+$color-white: #f8f7c8;
+$color-black: #000;
+
+/* === Mixins === */
+
+// Media queries
+/*
+320 - 400px - we are here
+400px - Large Phones
+568px - Landscape Mobile
+768px - Tablet
+1024px - Small Desktop (Laptops)
+1300px - Normal Desktop
+$breakpoint arguments
+- phone-large
+- phone-land
+- tab
+- desk-small
+- desk-normal
+1em = 16px
+*/
+
+@mixin respond($breakpoint) {
+	@if $breakpoint == phone-large {
+		@media (min-width: 25em) {
+			@content;
+		} // 400px
+	}
+	@if $breakpoint == phone-land {
+		@media (min-width: 35em) {
+			@content;
+		}
+	}
+	@if $breakpoint == tab {
+		@media (min-width: 48em) {
+			@content;
+		} // 768px
+	}
+	@if $breakpoint == desk-small {
+		@media (min-width: 64em) {
+			@content;
+		} //1024px
+	}
+	@if $breakpoint == desk-normal {
+		@media (min-width: 81em) {
+			@content;
+		} // 1300px
+	}
+}
+
+@mixin clearfix {
+	&::after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}

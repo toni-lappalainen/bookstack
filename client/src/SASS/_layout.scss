@@ -1,0 +1,30 @@
+/* === HEADER === */
+
+.header {
+	height: 20vh;
+	background: linear-gradient(
+		to right,
+		rgba($color-primary-dark, 0.8),
+		rgba($color-primary-light, 0.8)
+	);
+	animation: opacityIn 1s ease-out;
+}
+
+.heading-primary {
+	color: $color-white;
+	text-transform: uppercase;
+	font-size: 4rem;
+	font-weight: 400;
+	margin-bottom: 1rem;
+	padding-top: 4rem;
+	animation: opacityIn 1s ease-out;
+}
+
+.paragraph {
+	font-size: 1.6rem;
+	padding: 1rem;
+
+	&:not(:last-child) {
+		margin-bottom: 2rem;
+	}
+}
