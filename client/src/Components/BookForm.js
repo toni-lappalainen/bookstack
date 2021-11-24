@@ -57,13 +57,15 @@ const BookForm = () => {
 		}
 	};
 
-	const handleSubmit = async (values, submitType) => {
+	const handleSubmit = async (values, submitType, resetForm) => {
 		try {
 			if (submitType === 'save') await sendPostBookRequest(values);
 			else if (submitType === 'update')
 				await sendPatchBookRequest(selectedBook._id, values);
-			else if (submitType === 'delete')
-				sendDeleteBookRequest(selectedBook._id);
+			else if (submitType === 'delete') {
+				await sendDeleteBookRequest(selectedBook._id);
+				resetForm();
+			}
 		} catch (err) {
 			console.log(err);
 		}
@@ -73,42 +75,47 @@ const BookForm = () => {
 	return (
 		<Formik
 			initialValues={initialFormData}
+			validateOnChange={false}
+			validateOnBlur={false}
 			validate={(values) => {
 				const errors = {};
 
-				if (!values.author) errors.author = 'Required';
-				if (!values.title) errors.title = 'Required';
-				if (!values.description) errors.description = 'Required';
+				if (!values.author) errors.author = 'Required!';
+				if (!values.title) errors.title = 'Required!';
+				if (!values.description) errors.description = 'Required!';
 				return errors;
 			}}
-			onSubmit={async (values, { setSubmitting }) => {
+			onSubmit={async (values, { resetForm }) => {
 				// Flag is used to get right submitType by button pressed
-				handleSubmit(values, document.activeElement.dataset.flag);
+				handleSubmit(
+					values,
+					document.activeElement.dataset.flag,
+					resetForm
+				);
 			}}
 		>
-			{({ isSubmitting }) => (
-				<Form>
-					<label htmlFor="author">
-						Author
+			{({ resetForm }) => (
+				<Form className="content content__form">
+					<div className="content__form--inputs">
+						<label htmlFor="author">Author</label>
 						<MyField name="author" />
-					</label>
-					<label htmlFor="title">
-						title
+						<label htmlFor="title">Title</label>
 						<MyField name="title" />
-					</label>
-					<label htmlFor="description">
-						description
+						<label htmlFor="description">Description</label>
 						<MyField name="description" as="textarea" />
-					</label>
-					<button type="submit" data-flag="save">
-						Save new
-					</button>
-					<button type="submit" data-flag="update">
-						Update
-					</button>
-					<button type="submit" data-flag="delete">
-						Delete
-					</button>
+					</div>
+					<div className="content__form--buttons">
+						<button type="submit" data-flag="save">
+							Save new
+						</button>
+						<button type="submit" data-flag="update">
+							Update
+						</button>
+						<button type="submit" data-flag="delete">
+							Delete
+						</button>
+						<button onClick={resetForm}>Reset</button>
+					</div>
 				</Form>
 			)}
 		</Formik>

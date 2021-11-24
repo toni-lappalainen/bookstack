@@ -42,17 +42,18 @@ html {
       font-size: 75%; } }
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-weight: 400;
   line-height: 1.7;
-  color: #f7f7f7;
-  background-color: #000;
+  color: #041024;
   box-sizing: border-box; }
 
 .container {
   width: 100%;
   margin-right: auto;
-  margin-left: auto; }
+  margin-left: auto;
+  background-color: #f7f7f7;
+  height: 100vh; }
   @media (min-width: 81em) {
     .container {
       max-width: 120rem; } }
@@ -62,21 +63,64 @@ body {
 
 /* === HEADER === */
 .header {
-  height: 20vh;
-  background: linear-gradient(to right, rgba(0, 91, 102, 0.8), rgba(0, 182, 204, 0.8));
-  animation: opacityIn 1s ease-out; }
+  height: 10vh;
+  background: #0e387a; }
+  @media (min-width: 64em) {
+    .header {
+      height: 15vh; } }
 
 .heading-primary {
-  color: #f8f7c8;
+  font-family: 'Courier New', Courier, monospace;
+  color: #dfe4ec;
   text-transform: uppercase;
-  font-size: 4rem;
+  font-size: 5rem;
   font-weight: 400;
-  margin-bottom: 1rem;
-  padding-top: 4rem;
-  animation: opacityIn 1s ease-out; }
+  padding-top: 1.5rem; }
 
-.paragraph {
-  font-size: 1.6rem;
-  padding: 1rem; }
-  .paragraph:not(:last-child) {
-    margin-bottom: 2rem; }
+/* === CONTENT === */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.5rem; }
+  @media (min-width: 64em) {
+    .main-container {
+      flex-direction: row;
+      padding: 1rem;
+      font-size: 1.5rem; } }
+
+.content {
+  flex: 50%;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+  .content__form {
+    display: flex;
+    flex-direction: column; }
+    @media (min-width: 64em) {
+      .content__form {
+        max-width: 50%; } }
+    .content__form--inputs {
+      display: flex;
+      flex-direction: column; }
+    .content__form--buttons {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0; }
+  @media (min-width: 64em) {
+    .content__list {
+      max-width: 50%; } }
+
+button {
+  padding: 0.5rem 1rem; }
+
+input {
+  height: 3rem;
+  font-size: 1.5rem; }
+
+textarea {
+  font-size: 1.5rem;
+  max-width: 100%;
+  height: 15rem; }

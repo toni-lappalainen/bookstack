@@ -11,10 +11,12 @@ const App = () => {
 					Bookstack Client
 				</h1>
 			</header>
-			<DataContextProvider>
-				<Booklist />
-				<BookForm />
-			</DataContextProvider>
+			<main className="main-container">
+				<DataContextProvider>
+					<BookForm />
+					<Booklist />
+				</DataContextProvider>
+			</main>
 		</div>
 	);
 };

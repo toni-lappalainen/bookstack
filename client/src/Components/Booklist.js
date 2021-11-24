@@ -30,14 +30,16 @@ const Booklist = () => {
 	// Array for the DataTable
 	const columns = [
 		{
-			name: 'Author',
+			name: 'AUTHOR',
 			selector: (row) => row.author,
 			sortable: true,
+			wrap: true,
 		},
 		{
-			name: 'Title',
+			name: 'TITLE',
 			selector: (row) => row.title,
 			sortable: true,
+			wrap: true,
 		},
 	];
 
@@ -61,7 +63,7 @@ const Booklist = () => {
 			);
 	};
 
-	return <div>{renderTable()}</div>;
+	return <div className="content content__list">{renderTable()}</div>;
 };
 
 export default Booklist;
