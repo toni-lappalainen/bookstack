@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { sendGetBookListRequest } from '../database';
+import { sendGetBookListRequest } from '../apiRequests';
 import { DataContext } from '../Contexts/ContextProvider';
 
 const Booklist = () => {

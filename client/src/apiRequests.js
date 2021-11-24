@@ -13,11 +13,13 @@ const sendGetBookListRequest = async () => {
 };
 
 const sendPostBookRequest = async (book) => {
+	const { author, title, description } = book;
+
 	try {
 		const response = await axios.post(url + 'books', {
-			author: book.author,
-			title: book.title,
-			description: book.description,
+			author,
+			title,
+			description,
 		});
 		console.log('new book:', response.data);
 		return true;
@@ -28,11 +30,12 @@ const sendPostBookRequest = async (book) => {
 };
 
 const sendPatchBookRequest = async (id, book) => {
+	const { author, title, description } = book;
 	try {
 		const response = await axios.patch(url + 'books/' + id.toString(), {
-			author: book.author,
-			title: book.title,
-			description: book.description,
+			author,
+			title,
+			description,
 		});
 		console.log('patching book: ', response.data);
 	} catch (err) {

@@ -6,7 +6,7 @@ import {
 	sendPostBookRequest,
 	sendPatchBookRequest,
 	sendDeleteBookRequest,
-} from '../database';
+} from '../apiRequests';
 
 const initialFormData = {
 	author: '',
