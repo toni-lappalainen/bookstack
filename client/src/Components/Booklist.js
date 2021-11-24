@@ -19,6 +19,7 @@ const Booklist = () => {
 			}
 		};
 		getData();
+		// eslint-disable-next-line
 	}, []);
 
 	// when Row/book in table is clicked, select that book as currently edited book

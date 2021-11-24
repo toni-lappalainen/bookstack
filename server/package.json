@@ -4,12 +4,15 @@
 	"description": "Server for Bookstack client",
 	"main": "./src/server.js",
 	"scripts": {
-		"start:dev": "nodemon server.js",
-		"start:prod": "NODE_ENV=production nodemon server.js"
+		"postinstall": "cd ../client && npm install",
+		"start:dev": "node src/server.js",
+		"start:prod": "NODE_ENV=production nodemon server.js",
+		"start:both": "concurrently \"npm run-script start:dev\" \"cd ../client && npm run-script start\""
 	},
 	"author": "Toni Lappalainen",
 	"license": "MIT",
 	"dependencies": {
+		"concurrently": "^6.4.0",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
 		"mongodb": "^4.2.0",
