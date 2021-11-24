@@ -113,6 +113,10 @@ body {
     .content__list {
       max-width: 50%; } }
 
+.success {
+  color: #0e387a;
+  min-height: 3rem; }
+
 .error {
   color: red; }
 

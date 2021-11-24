@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Formik, Form, useField, useFormikContext } from 'formik';
 import { DataContext } from '../Contexts/ContextProvider';
 import {
@@ -51,6 +51,7 @@ const MyField = (props) => {
 
 const BookForm = () => {
 	const { setBooksArray, selectedBook } = useContext(DataContext);
+	const [success, setSuccess] = useState('');
 
 	// function for retrieving the books from database after making changes
 	const retrieveBookList = async () => {
@@ -71,9 +72,14 @@ const BookForm = () => {
 				await sendDeleteBookRequest(selectedBook._id);
 				resetForm();
 			}
+			setSuccess(`${submitType} successful!`);
 		} catch (err) {
+			setSuccess(`${submitType} failed. error: ${err}.`);
 			console.log(err);
 		}
+		setInterval(() => {
+			setSuccess('');
+		}, 5000);
 		retrieveBookList();
 	};
 
@@ -127,6 +133,7 @@ const BookForm = () => {
 							Delete
 						</button>
 					</div>
+					<div className="success">{success}</div>
 				</Form>
 			)}
 		</Formik>
