@@ -22,7 +22,7 @@ const MyField = (props) => {
 	const { selectedBook } = useContext(DataContext);
 	const { setFieldValue } = useFormikContext();
 	const [field, meta] = useField(props);
-	// boolean for checking if current field should be textarea
+	// boolean for checking if Field should be textarea
 	const isTextArea = props.name === 'description';
 
 	useEffect(() => {
@@ -39,7 +39,12 @@ const MyField = (props) => {
 			) : (
 				<input {...props} {...field} />
 			)}
-			{!!meta.touched && !!meta.error && <div>{meta.error}</div>}
+			{
+				// show error messages after validation
+				!!meta.touched && !!meta.error && (
+					<div className="error">{meta.error}</div>
+				)
+			}
 		</>
 	);
 };
@@ -75,6 +80,7 @@ const BookForm = () => {
 	return (
 		<Formik
 			initialValues={initialFormData}
+			// Only validate fields when submitting
 			validateOnChange={false}
 			validateOnBlur={false}
 			validate={(values) => {
@@ -83,7 +89,7 @@ const BookForm = () => {
 				for (var key in values) {
 					if (values.hasOwnProperty(key)) {
 						if (!values[key]) errors[key] = 'Required!';
-						if (key !== 'description' && values[key].length > 30) {
+						if (key !== 'description' && values[key].length > 50) {
 							errors[key] = 'Too long!';
 						} else if (values[key].length > 800)
 							errors[key] = 'Too long!';
@@ -100,7 +106,7 @@ const BookForm = () => {
 				);
 			}}
 		>
-			{({ resetForm }) => (
+			{() => (
 				<Form className="content content__form">
 					<div className="content__form--inputs">
 						<label htmlFor="author">Author</label>
@@ -115,12 +121,11 @@ const BookForm = () => {
 							Save new
 						</button>
 						<button type="submit" data-flag="update">
-							Update
+							Save
 						</button>
 						<button type="submit" data-flag="delete">
 							Delete
 						</button>
-						<button onClick={resetForm}>Reset</button>
 					</div>
 				</Form>
 			)}

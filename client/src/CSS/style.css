@@ -113,6 +113,9 @@ body {
     .content__list {
       max-width: 50%; } }
 
+.error {
+  color: red; }
+
 button {
   padding: 0.5rem 1rem; }
 
