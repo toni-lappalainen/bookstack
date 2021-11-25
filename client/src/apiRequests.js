@@ -4,7 +4,7 @@ const url = 'http://localhost:3002/';
 
 const sendGetBookListRequest = async () => {
 	try {
-		const response = await axios.get(url + 'books');
+		const response = await axios.get(`${url}books`);
 		return response.data;
 	} catch (err) {
 		console.error(err);
@@ -15,7 +15,7 @@ const sendPostBookRequest = async (book) => {
 	const { author, title, description } = book;
 
 	try {
-		const response = await axios.post(url + 'books', {
+		const response = await axios.post(`${url}books`, {
 			author,
 			title,
 			description,
@@ -29,7 +29,7 @@ const sendPostBookRequest = async (book) => {
 const sendPatchBookRequest = async (id, book) => {
 	const { author, title, description } = book;
 	try {
-		const response = await axios.patch(url + 'books/' + id.toString(), {
+		const response = await axios.patch(`${url}books/${id.toString()}`, {
 			author,
 			title,
 			description,
@@ -41,7 +41,9 @@ const sendPatchBookRequest = async (id, book) => {
 
 const sendDeleteBookRequest = async (id) => {
 	try {
-		const response = await axios.delete(url + 'books/' + id, { id: id });
+		const response = await axios.delete(`${url}books/${id.toString()}`, {
+			id,
+		});
 	} catch (err) {
 		console.log(err);
 	}
