@@ -5,7 +5,7 @@ import { DataContext } from '../Contexts/ContextProvider';
 
 // Component for showing the list of books in DataTable
 const Booklist = () => {
-	const { booksArray, setBooksArray, setSelectedBook } =
+	const { booksArray, setBooksArray, selectedBook, setSelectedBook } =
 		useContext(DataContext);
 
 	// Get list of books in server and assing it to booksArray
@@ -27,6 +27,18 @@ const Booklist = () => {
 		const book = booksArray.find((x) => x._id === row._id);
 		setSelectedBook(book);
 	};
+
+	// change row color to implicate which book is currently selected
+	const selectedRowStyle = [
+		{
+			when: (row) =>
+				selectedBook !== null && row._id === selectedBook._id,
+			style: {
+				backgroundColor: 'green',
+				color: 'white',
+			},
+		},
+	];
 
 	// Array for the DataTable
 	const columns = [
@@ -59,6 +71,7 @@ const Booklist = () => {
 					noHeader
 					striped
 					highlightOnHover
+					conditionalRowStyles={selectedRowStyle}
 					onRowClicked={(row) => selectRow(row)}
 				/>
 			);
