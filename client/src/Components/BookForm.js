@@ -50,13 +50,15 @@ const MyField = (props) => {
 };
 
 const BookForm = () => {
-	const { setBooksArray, selectedBook } = useContext(DataContext);
+	const { setBooksArray, selectedBook, setSelectedBook } =
+		useContext(DataContext);
 	const [success, setSuccess] = useState('');
 	const [disabled, setDisabled] = useState(true);
 
 	useEffect(() => {
 		// Enable save&delete buttons when a book is selected
 		if (selectedBook !== null) setDisabled(false);
+		else setDisabled(true);
 	}, [selectedBook]);
 
 	// function for retrieving the books from database after making changes
@@ -79,11 +81,11 @@ const BookForm = () => {
 			else if (submitType === 'delete') {
 				await sendDeleteBookRequest(selectedBook._id);
 				resetForm();
+				setSelectedBook(null);
 			}
 			setSuccess(`${submitType} successful!`);
 		} catch (err) {
 			setSuccess(`${submitType} failed. error: ${err}.`);
-			console.log(err);
 		}
 		setTimeout(() => {
 			setSuccess('');
@@ -99,14 +101,21 @@ const BookForm = () => {
 			validateOnBlur={false}
 			validate={(values) => {
 				const errors = {};
+				const textLength = 50;
+				const textAreaLength = 800;
 				// check that all fields have values and that they are not too long
 				for (var key in values) {
 					if (values.hasOwnProperty(key)) {
+						const len = values[key].length;
 						if (!values[key]) errors[key] = 'Required!';
-						if (key !== 'description' && values[key].length > 50) {
-							errors[key] = 'Too long!';
-						} else if (values[key].length > 800)
-							errors[key] = 'Too long!';
+						if (key !== 'description' && len > textLength) {
+							errors[
+								key
+							] = `Too long! max characters: ${textLength}. Current length: ${len}.`;
+						} else if (len > textAreaLength)
+							errors[
+								key
+							] = `Too long! max characters: ${textAreaLength}. Current length: ${len}.`;
 					}
 				}
 				return errors;
