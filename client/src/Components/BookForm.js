@@ -52,6 +52,12 @@ const MyField = (props) => {
 const BookForm = () => {
 	const { setBooksArray, selectedBook } = useContext(DataContext);
 	const [success, setSuccess] = useState('');
+	const [disabled, setDisabled] = useState(true);
+
+	useEffect(() => {
+		// Enable save&delete buttons when a book is selected
+		if (selectedBook !== null) setDisabled(false);
+	}, [selectedBook]);
 
 	// function for retrieving the books from database after making changes
 	const retrieveBookList = async () => {
@@ -63,6 +69,8 @@ const BookForm = () => {
 		}
 	};
 
+	// Choose the right api function based on button pressed
+	// Show success/error message
 	const handleSubmit = async (values, submitType, resetForm) => {
 		try {
 			if (submitType === 'save') await sendPostBookRequest(values);
@@ -77,7 +85,7 @@ const BookForm = () => {
 			setSuccess(`${submitType} failed. error: ${err}.`);
 			console.log(err);
 		}
-		setInterval(() => {
+		setTimeout(() => {
 			setSuccess('');
 		}, 5000);
 		retrieveBookList();
@@ -126,10 +134,18 @@ const BookForm = () => {
 						<button type="submit" data-flag="save">
 							Save new
 						</button>
-						<button type="submit" data-flag="update">
+						<button
+							type="submit"
+							data-flag="update"
+							disabled={disabled}
+						>
 							Save
 						</button>
-						<button type="submit" data-flag="delete">
+						<button
+							type="submit"
+							data-flag="delete"
+							disabled={disabled}
+						>
 							Delete
 						</button>
 					</div>
