@@ -64,7 +64,7 @@ const Booklist = () => {
 					title="Books"
 					columns={columns}
 					data={booksArray}
-					defaultSortField="author"
+					defaultSortFieldId="0"
 					pagination
 					highlightOnHovers
 					dense

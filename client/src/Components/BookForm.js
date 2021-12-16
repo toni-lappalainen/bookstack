@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Formik, Form, useField, useFormikContext } from 'formik';
+import { Formik, Form } from 'formik';
 import { DataContext } from '../Contexts/ContextProvider';
+import CustomField from './CustomField';
 import {
 	sendGetBookListRequest,
 	sendPostBookRequest,
@@ -14,39 +15,6 @@ const initialFormData = {
 	author: '',
 	title: '',
 	description: '',
-};
-
-// Custom field that takes care of showing currently selected book's data in the form
-// without making the values unmutable
-const MyField = (props) => {
-	const { selectedBook } = useContext(DataContext);
-	const { setFieldValue } = useFormikContext();
-	const [field, meta] = useField(props);
-	// boolean for checking if Field should be textarea
-	const isTextArea = props.name === 'description';
-
-	useEffect(() => {
-		// set the value of field based on selectedBook
-		if (selectedBook !== null) {
-			setFieldValue(props.name, selectedBook[props.name]);
-		}
-	}, [selectedBook, setFieldValue, props.name]);
-
-	return (
-		<>
-			{isTextArea ? (
-				<textarea {...props} {...field} />
-			) : (
-				<input {...props} {...field} />
-			)}
-			{
-				// show error messages after validation
-				!!meta.touched && !!meta.error && (
-					<div className="error">{meta.error}</div>
-				)
-			}
-		</>
-	);
 };
 
 const BookForm = () => {
@@ -133,11 +101,11 @@ const BookForm = () => {
 				<Form className="content content__form">
 					<div className="content__form--inputs">
 						<label htmlFor="author">Author</label>
-						<MyField name="author" />
+						<CustomField name="author" />
 						<label htmlFor="title">Title</label>
-						<MyField name="title" />
+						<CustomField name="title" />
 						<label htmlFor="description">Description</label>
-						<MyField name="description" as="textarea" />
+						<CustomField name="description" as="textarea" />
 					</div>
 					<div className="content__form--buttons">
 						<button type="submit" data-flag="save">
